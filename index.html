@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>مأموریت نجات شهر هوشمند</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;800;900&display=swap');
+:root{--ink:#20304a;--purple:#6c55d9;--cyan:#31b8c8;--gold:#ffc857;--green:#25a978;--pink:#f27b9b;--paper:#fff}
+*{box-sizing:border-box}
+body{margin:0;font-family:'Vazirmatn',Tahoma,sans-serif;color:var(--ink);background:linear-gradient(135deg,#e9f7ff,#f5efff 55%,#fff4e7);min-height:100vh}
+button,input{font:inherit}
+button{cursor:pointer;border:0}
+.wrap{max-width:980px;margin:auto;padding:22px 16px 40px}
+.hero{position:relative;overflow:hidden;border-radius:28px;padding:30px 24px;text-align:center;color:#fff;background:linear-gradient(120deg,#5a4acb,#3b9ecb);box-shadow:0 14px 35px #344b8528}
+.hero:before,.hero:after{content:"";position:absolute;border-radius:50%;background:#ffffff18}
+.hero:before{width:190px;height:190px;top:-95px;right:-35px}.hero:after{width:150px;height:150px;bottom:-90px;left:8%}
+.badge{display:inline-block;background:#ffffff25;border:1px solid #ffffff55;border-radius:30px;padding:5px 15px;font-size:13px}
+h1{font-size:clamp(25px,5vw,42px);margin:10px 0 6px;font-weight:900}.hero p{margin:5px 0 0;color:#eefaff}
+.panel{background:#ffffffed;border:1px solid #fff;border-radius:22px;padding:22px;margin-top:18px;box-shadow:0 9px 28px #42577a12}
+.startbox{max-width:540px;margin:20px auto 0;text-align:center}
+label{display:block;text-align:right;font-weight:700;margin:12px 0 7px}
+input[type=text]{width:100%;padding:13px 15px;border:2px solid #e0e6f3;border-radius:13px;outline:none;background:#fbfcff}
+input:focus{border-color:var(--purple)}
+.primary{background:linear-gradient(100deg,var(--purple),#478fd1);color:#fff;padding:12px 25px;border-radius:14px;font-weight:800;box-shadow:0 6px 15px #6554c533}
+.primary:disabled{opacity:.45;cursor:not-allowed}
+.secondary{background:#eef0ff;color:#5144b7;padding:10px 18px;border-radius:12px;font-weight:700}
+.topline{display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap}
+.stat{background:#f1f4ff;border-radius:12px;padding:8px 13px;font-weight:800;font-size:14px}
+.progress{height:10px;background:#e8edf7;border-radius:20px;overflow:hidden;margin:15px 0 20px}
+.progress>span{display:block;height:100%;width:0;background:linear-gradient(90deg,#31b8c8,#6c55d9);transition:width .35s}
+.stagegrid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:15px 0}
+.stage{padding:13px 8px;border-radius:15px;background:#f3f5fb;text-align:center;border:2px solid transparent;font-size:14px;font-weight:800}
+.stage.active{border-color:var(--purple);background:#f0edff;color:#5543c2}
+.stage.done{background:#e6f8f0;color:#18845e}
+.stage .icon{display:block;font-size:25px;margin-bottom:3px}
+.question-card{background:linear-gradient(135deg,#fbfcff,#f4f5ff);border:1px solid #e7e9fa;border-radius:19px;padding:20px;margin-top:14px}
+.tag{display:inline-block;border-radius:20px;padding:5px 12px;background:#e5f8fb;color:#167d8b;font-size:13px;font-weight:800}
+.question{font-size:20px;line-height:1.9;font-weight:800;margin:13px 0}
+.options{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.option{background:#fff;border:2px solid #e4e8f2;border-radius:13px;padding:12px;text-align:center;font-weight:700;color:var(--ink);transition:.2s}
+.option:hover{border-color:#8d7de7;transform:translateY(-1px)}
+.option.selected{border-color:var(--purple);background:#f1efff}
+.option.correct{border-color:var(--green);background:#e7f8f0}
+.option.wrong{border-color:#e47b89;background:#fff0f2}
+.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:17px}
+.feedback{display:none;padding:13px 15px;border-radius:13px;margin-top:14px;line-height:1.8;font-weight:600}
+.feedback.good{display:block;background:#e8f8f0;color:#176e50}
+.feedback.try{display:block;background:#fff5df;color:#815d12}
+.hint{display:none;margin-top:12px;background:#fff8e8;border-right:4px solid var(--gold);padding:11px 13px;border-radius:10px;line-height:1.8}
+.footer{text-align:center;color:#6c7890;font-size:13px;margin:20px 0 0}
+.result{text-align:center}.bigscore{font-size:45px;font-weight:900;color:var(--purple)}
+.hidden{display:none!important}
+@media(max-width:600px){.stagegrid{grid-template-columns:repeat(2,1fr)}.options{grid-template-columns:1fr}.panel{padding:16px}.question{font-size:18px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="hero">
+ <span class="badge">🎓 بازی آموزشی ویژه پایه سوم ابتدایی</span>
+ <h1>🏙️ مأموریت نجات شهر هوشمند</h1>
+ <p>فکر کن، سرنخ‌ها را پیدا کن و با انتخاب بهترین راه‌حل، شهر را نجات بده!</p>
+</header>
+
+<section id="start" class="panel startbox">
+ <div style="font-size:54px">🧩🚀</div>
+ <h2>قهرمان کوچک، آماده‌ای؟</h2>
+ <p>برای شروع، نامت را بنویس. در هر مرحله یک چالش تازه منتظر توست.</p>
+ <label for="studentName">نام و نام خانوادگی دانش‌آموز</label>
+ <input id="studentName" type="text" maxlength="35" placeholder="مثلاً: آوا احمدی">
+ <div style="margin-top:18px"><button class="primary" id="startBtn" onclick="startGame()">شروع مأموریت 🚀</button></div>
+ <p style="font-size:13px;color:#77839a;margin-top:14px">۶ مرحله‌ی فکری • راهنمایی • امتیاز و نشان افتخار</p>
+</section>
+
+<section id="game" class="panel hidden">
+ <div class="topline">
+  <div class="stat">👤 <span id="player"></span></div>
+  <div class="stat">⭐ امتیاز: <span id="score">۰</span></div>
+  <div class="stat">🏅 پاسخ درست: <span id="rightCount">۰</span></div>
+ </div>
+ <div class="progress"><span id="progressBar"></span></div>
+ <div class="stagegrid" id="stageGrid"></div>
+ <div class="topline">
+  <h2 id="stageTitle" style="margin:0">مرحله</h2>
+  <span class="tag" id="stageCounter">مرحله ۱ از ۶</span>
+ </div>
+ <div class="question-card">
+  <span class="tag" id="category">🧠 چالش فکری</span>
+  <div class="question" id="questionText"></div>
+  <div class="options" id="options"></div>
+  <div class="hint" id="hint"></div>
+  <div class="feedback" id="feedback" aria-live="polite"></div>
+  <div class="actions">
+   <button class="secondary" id="hintBtn" onclick="showHint()">💡 راهنمایی</button>
+   <button class="primary" id="checkBtn" onclick="checkAnswer()" disabled>بررسی پاسخ</button>
+   <button class="primary hidden" id="nextBtn" onclick="nextQuestion()">چالش بعدی ←</button>
+  </div>
+ </div>
+</section>
+
+<section id="finish" class="panel result hidden">
+ <div style="font-size:65px">🏆🌈</div>
+ <h2 id="finishTitle">آفرین قهرمان!</h2>
+ <p>تو با فکر کردن و تلاش، مأموریت نجات شهر را به پایان رساندی.</p>
+ <div class="bigscore"><span id="finalScore">۰</span> امتیاز</div>
+ <p id="summary"></p>
+ <div id="medal" style="font-size:48px;margin:12px"></div>
+ <button class="primary" onclick="location.reload()">🔁 بازی دوباره</button>
+</section>
+<div class="footer">طراح: <strong>سعیده محمودیان</strong> | بازی تقویت مهارت حل مسئله</div>
+</div>
+<script>
+const stages = [
+ {name:"معمای ریاضی",icon:"🧮",items:[
+  {q:"در کتابخانه‌ی مدرسه ۳ قفسه وجود دارد. در هر قفسه ۸ کتاب داستان است. اگر ۵ کتاب امانت داده شود، چند کتاب باقی می‌ماند؟",opts:["۱۹ کتاب","۲۱ کتاب","۲۴ کتاب","۲۹ کتاب"],a:0,h:"اول تعداد همه‌ی کتاب‌ها را با ضرب به دست بیاور؛ بعد ۵ تا کم کن.",why:"۳ × ۸ = ۲۴ و ۲۴ − ۵ = ۱۹. آفرین که مسئله را دو مرحله‌ای حل کردی!"},
+  {q:"مینا ۳۶ برچسب دارد و ۹ برچسب دیگر هم هدیه می‌گیرد. حالا چند برچسب دارد؟",opts:["۴۳","۴۴","۴۵","۴۶"],a:2,h:"برای پیدا کردن تعداد کل، ۳۶ و ۹ را با هم جمع کن.",why:"۳۶ + ۹ = ۴۵؛ پس مینا ۴۵ برچسب دارد."}
+ ]},
+ {name:"کارآگاه کوچولو",icon:"🔍",items:[
+  {q:"سه جعبه قرمز، آبی و زرد داریم. توپ در جعبه قرمز نیست. توپ در جعبه آبی هم نیست. توپ در کدام جعبه است؟",opts:["قرمز","آبی","زرد","مشخص نیست"],a:2,h:"دو جعبه را با سرنخ‌ها کنار بگذار.",why:"توپ نه در قرمز است و نه در آبی؛ پس در جعبه زرد است."},
+  {q:"علی از رضا بلندتر است. رضا از سارا بلندتر است. چه کسی از همه کوتاه‌تر است؟",opts:["علی","رضا","سارا","نمی‌توان فهمید"],a:2,h:"قدها را از بلندتر به کوتاه‌تر مرتب کن.",why:"ترتیب قدها علی، رضا، سارا است؛ پس سارا کوتاه‌تر است."}
+ ]},
+ {name:"بهترین انتخاب",icon:"🧠",items:[
+  {q:"باران شروع شده و تو باید کتاب‌های روی نیمکت حیاط را به کلاس ببری. بهترین کار چیست؟",opts:["اول کتاب‌ها را جمع کنم و به جای خشک ببرم","منتظر بمانم تا خیس شوند","فقط یکی را بردارم","روی کتاب‌ها آب بریزم"],a:0,h:"به کاری فکر کن که از کتاب‌ها محافظت کند و همه را به جای امن ببرد.",why:"جمع کردن کتاب‌ها و بردن آن‌ها به جای خشک، بهترین راه برای جلوگیری از خیس شدن آن‌هاست."},
+  {q:"برای ساختن یک کاردستی گروهی، یکی از هم‌گروهی‌ها ایده‌ی متفاوتی دارد. چه کار بهتر است؟",opts:["بدون شنیدن حرفش رد کنم","با گروه درباره‌ی ایده‌ها گفت‌وگو کنیم","کار را رها کنیم","فقط نظر خودم را اجرا کنم"],a:1,h:"در کار گروهی، شنیدن نظرها کمک می‌کند راه‌حل بهتری پیدا کنیم.",why:"گفت‌وگو و بررسی ایده‌ها به گروه کمک می‌کند بهترین تصمیم را بگیرد."}
+ ]},
+ {name:"خرید هوشمند",icon:"🛒",items:[
+  {q:"تو ۵۰ هزار تومان داری. یک دفتر ۱۸ هزار تومان و یک مداد ۷ هزار تومان می‌خری. چقدر پول برایت می‌ماند؟",opts:["۲۳ هزار تومان","۲۵ هزار تومان","۳۰ هزار تومان","۳۲ هزار تومان"],a:1,h:"اول هزینه‌ی دو خرید را جمع کن، بعد از ۵۰ هزار تومان کم کن.",why:"۱۸ + ۷ = ۲۵ و ۵۰ − ۲۵ = ۲۵؛ پس ۲۵ هزار تومان باقی می‌ماند."},
+  {q:"برای جشن کلاس ۲۴ بادکنک آبی و ۱۸ بادکنک زرد آماده شده است. اگر ۷ بادکنک بترکد، چند بادکنک باقی می‌ماند؟",opts:["۳۳","۳۴","۳۵","۳۶"],a:2,h:"ابتدا تعداد دو رنگ بادکنک را جمع کن؛ سپس ۷ تا کم کن.",why:"۲۴ + ۱۸ = ۴۲ و ۴۲ − ۷ = ۳۵؛ پس ۳۵ بادکنک باقی می‌ماند."}
+ ]},
+ {name:"پل عبور از رودخانه",icon:"🌉",items:[
+  {q:"برای رسیدن به کتابخانه باید از ۳ پل بگذری. روی هر پل یک نشانه هست: ⭐، 🌙، ⭐. اگر نشانه‌ها را به همان ترتیب دنبال کنی، نشانه‌ی پل دوم چیست؟",opts:["⭐ ستاره","🌙 ماه","☀️ خورشید","🌈 رنگین‌کمان"],a:1,h:"نشانه‌ها را از پل اول تا سوم بخوان.",why:"ترتیب نشانه‌ها ستاره، ماه، ستاره است؛ پس پل دوم ماه دارد."},
+  {q:"یک مسیر ۱۸ قدمی تا دروازه داریم. تو ۷ قدم رفته‌ای. چند قدم دیگر مانده است؟",opts:["۹ قدم","۱۰ قدم","۱۱ قدم","۱۲ قدم"],a:2,h:"تعداد قدم‌های رفته را از کل مسیر کم کن.",why:"۱۸ − ۷ = ۱۱؛ یازده قدم دیگر مانده است."}
+ ]},
+ {name:"نجات شهر",icon:"🏙️",items:[
+  {q:"برای روشن شدن چراغ شهر، باید این الگو را کامل کنی: ۲، ۴، ۸، ۱۶، ... عدد بعدی چیست؟",opts:["۱۸","۲۴","۳۰","۳۲"],a:3,h:"به رابطه‌ی هر عدد با عدد بعدی دقت کن.",why:"هر عدد دو برابر عدد قبلی است؛ ۱۶ × ۲ = ۳۲."},
+  {q:"در پارک ۵ ردیف درخت وجود دارد و در هر ردیف ۴ درخت کاشته شده است. اگر ۳ درخت خشک شوند، چند درخت سالم می‌ماند؟",opts:["۱۵","۱۷","۲۰","۲۳"],a:1,h:"تعداد کل درخت‌ها را با ضرب پیدا کن و سپس ۳ تا کم کن.",why:"۵ × ۴ = ۲۰ و ۲۰ − ۳ = ۱۷؛ شهر دوباره سبز شد!"}
+ ]}
+];
+let stageIndex=0,questionIndex=0,score=0,right=0,selected=null,locked=false,playerName="";
+const fa=n=>String(n).replace(/\d/g,d=>"۰۱۲۳۴۵۶۷۸۹"[d]);
+function startGame(){
+ playerName=document.getElementById("studentName").value.trim();
+ if(!playerName){document.getElementById("studentName").focus();return}
+ document.getElementById("player").textContent=playerName;
+ document.getElementById("start").classList.add("hidden");
+ document.getElementById("game").classList.remove("hidden");
+ renderStages();renderQuestion();
+}
+function renderStages(){
+ const grid=document.getElementById("stageGrid");grid.innerHTML="";
+ stages.forEach((s,i)=>{
+  const d=document.createElement("div");d.className="stage"+(i===stageIndex?" active":"")+(i<stageIndex?" done":"");
+  d.innerHTML=`<span class="icon">${i<stageIndex?"✅":s.icon}</span>${s.name}`;
+  grid.appendChild(d);
+ });
+}
+function renderQuestion(){
+ const s=stages[stageIndex],item=s.items[questionIndex];
+ selected=null;locked=false;
+ document.getElementById("stageTitle").textContent=s.name;
+ document.getElementById("stageCounter").textContent=`مرحله ${fa(stageIndex+1)} از ${fa(stages.length)} | پرسش ${fa(questionIndex+1)} از ${fa(s.items.length)}`;
+ document.getElementById("category").textContent=s.icon+" چالش فکری";
+ document.getElementById("questionText").textContent=item.q;
+ document.getElementById("options").innerHTML="";
+ item.opts.forEach((op,i)=>{
+  const b=document.createElement("button");b.className="option";b.textContent=op;
+  b.onclick=()=>selectOption(i,b);document.getElementById("options").appendChild(b);
+ });
+ document.getElementById("hint").style.display="none";
+ document.getElementById("hint").textContent="💡 "+item.h;
+ document.getElementById("feedback").className="feedback";document.getElementById("feedback").textContent="";
+ document.getElementById("hintBtn").classList.remove("hidden");
+ document.getElementById("checkBtn").classList.remove("hidden");document.getElementById("checkBtn").disabled=true;
+ document.getElementById("nextBtn").classList.add("hidden");
+ document.getElementById("progressBar").style.width=((stageIndex*2+questionIndex)/(stages.length*2))*100+"%";
+ document.getElementById("score").textContent=fa(score);document.getElementById("rightCount").textContent=fa(right);
+ renderStages();
+}
+function selectOption(i,b){
+ if(locked)return;selected=i;
+ document.querySelectorAll(".option").forEach(x=>x.classList.remove("selected"));
+ b.classList.add("selected");document.getElementById("checkBtn").disabled=false;
+}
+function showHint(){document.getElementById("hint").style.display="block"}
+function checkAnswer(){
+ if(selected===null||locked)return;
+ locked=true;const item=stages[stageIndex].items[questionIndex];
+ const correctIndex=item.fix!==undefined?item.fix:item.a;
+ const buttons=[...document.querySelectorAll(".option")];
+ buttons.forEach((b,i)=>{if(i===correctIndex)b.classList.add("correct");else if(i===selected)b.classList.add("wrong")});
+ const fb=document.getElementById("feedback");
+ if(selected===correctIndex){score+=10;right++;fb.className="feedback good";fb.textContent="🌟 آفرین! پاسخ درست است. "+item.why}
+ else{fb.className="feedback try";fb.textContent="تلاش خوبی بود! پاسخ درست: «"+item.opts[correctIndex]+"». "+item.why}
+ document.getElementById("score").textContent=fa(score);document.getElementById("rightCount").textContent=fa(right);
+ document.getElementById("checkBtn").classList.add("hidden");document.getElementById("hintBtn").classList.add("hidden");
+ const next=document.getElementById("nextBtn");next.classList.remove("hidden");
+ next.textContent=(questionIndex===1&&stageIndex===stages.length-1)?"دیدن نتیجه 🏆":(questionIndex===1?"رفتن به مرحله بعد ←":"چالش بعدی ←");
+}
+function nextQuestion(){
+ if(questionIndex===0){questionIndex=1}
+ else{questionIndex=0;stageIndex++}
+ if(stageIndex>=stages.length){finishGame();return}
+ renderQuestion();
+}
+function finishGame(){
+ document.getElementById("game").classList.add("hidden");document.getElementById("finish").classList.remove("hidden");
+ document.getElementById("finalScore").textContent=fa(score);
+ document.getElementById("finishTitle").textContent="قهرمان شهر، "+playerName+"! 🎉";
+ document.getElementById("summary").textContent=`از ${fa(12)} چالش، به ${fa(right)} پرسش پاسخ درست دادی.`;
+ document.getElementById("medal").textContent=score>=100?"🥇 نشان طلایی":score>=70?"🥈 نشان نقره‌ای":"🥉 نشان تلاش و پشتکار";
+ document.getElementById("progressBar").style.width="100%";
+}
+</script>
+</body>
+</html>
